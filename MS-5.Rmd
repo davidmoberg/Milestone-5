@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
 library(gt)
 library(readr)
 library(readxl)
@@ -18,11 +18,15 @@ library(tidyverse)
 Data Source: https://www.eia.gov/electricity/data.php
 
 ```{r Read in and clean ~some~ of the data}
+#This is meant to be a preliminary cleaning of the data. I am not in any way done with cleaning and preparing all the data I need - I still am not even sure which data out of the entire set I need. I apologize, then - I know the information below is not nearly enough relative to what was asked for this problem set. At this point though/due to the insane week I have been having, I need to jsut turn something in and call it enough, for now. Below, please find my data cleaning from the previous milestone (m4Data/plotData) as well as the addition of monthly power generation data for the last 46 years (annual_monthly_data). Still, my apologies.
+
 m4Data <- read_xlsx(path = "raw-data/august2019/Table_1_11_B.xlsx", skip = 5)
 m4Data<-m4Data%>%head(-2)%>%clean_names()%>%select("census_division_and_state", "june_2019_ytd_2", "june_2018_ytd_3", "percentage_change")
 
 plotData<-subset(m4Data, census_division_and_state %in% c("New England", "Middle Atlantic", "East North Central", "West North Central", "South Atlantic", "East South Central", "West South Central", "Mountain", "Pacific Contiguous", "Pacific Noncontiguous"))
 
-annual_data<-read_xlsx(path ="raw-data/Table_7.1_Electricity_Overview.xlsx", skip = 10)%>%clean_names()%>%select("month", "electricity_net_generation_electric_power_sector", "electricity_net_generation_industrial_sector", "electricity_net_generation_total")%>%tail(-1)
-kable(annual_data)
+annual_monthly_data<-read_xlsx(path ="raw-data/Table_7.1_Electricity_Overview.xlsx", skip = 10)%>%clean_names()%>%select("month", "electricity_net_generation_electric_power_sector", "electricity_net_generation_industrial_sector", "electricity_net_generation_total")%>%tail(-1)
 ```
+
+
+The EIA, or Energy Information Administration, is a division of the US Department of Energy, that, true to its name, compiles massive amounts of data on electricity production in the US. By state, year, type of generation, what the electricity is used for, and so on and so forth. This data is publicly available, and is released every month for research purposes. The sheer amount of well-cleaned and useful data available is staggering, and is a project in itself to try and read through in its entirety - please see code comments. The EIA's work is perhaps the best repository of information on large-scale power generation in the USA
