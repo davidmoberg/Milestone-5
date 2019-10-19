@@ -1,0 +1,28 @@
+---
+title: "Draft About Page"
+author: "David Moberg"
+date: "10/19/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(gt)
+library(readr)
+library(readxl)
+library(janitor)
+library(knitr)
+library(tidyverse)
+```
+
+Data Source: https://www.eia.gov/electricity/data.php
+
+```{r Read in and clean ~some~ of the data}
+m4Data <- read_xlsx(path = "raw-data/august2019/Table_1_11_B.xlsx", skip = 5)
+m4Data<-m4Data%>%head(-2)%>%clean_names()%>%select("census_division_and_state", "june_2019_ytd_2", "june_2018_ytd_3", "percentage_change")
+
+plotData<-subset(m4Data, census_division_and_state %in% c("New England", "Middle Atlantic", "East North Central", "West North Central", "South Atlantic", "East South Central", "West South Central", "Mountain", "Pacific Contiguous", "Pacific Noncontiguous"))
+
+annual_data<-read_xlsx(path ="raw-data/Table_7.1_Electricity_Overview.xlsx", skip = 10)%>%clean_names()%>%select("month", "electricity_net_generation_electric_power_sector", "electricity_net_generation_industrial_sector", "electricity_net_generation_total")%>%tail(-1)
+kable(annual_data)
+```
